@@ -12,10 +12,20 @@ class App extends Component {
 }
 
 class FilterableProductTable extends Component {
+  constructor(props){
+    super(props);
+    this.state = {searchText: ''};
+    this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+  }
+
+  handleSearchTextChange(searchText){
+    this.setState({searchText: searchText});
+  }
+
   render() {
     return (
       <div>
-        <SearchBar />
+        <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange}/>
         <ProductTable products={PRODUCTS}/>
       </div>
     );
@@ -23,10 +33,20 @@ class FilterableProductTable extends Component {
 }
 
 class SearchBar extends Component {
+  constructor(props){
+    super(props);
+    this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+  }
+
+  handleSearchTextChange(e){
+    this.props.onSearchTextChange(e.target.value);
+  }
+
   render() {
+    const searchText = this.props.searchText;
     return(
       <form>
-        <input type="text" placeholder="Search..."></input>
+        <input id="searchInput" type="text" placeholder="Search..."  value={searchText} onChange={this.handleSearchTextChange}></input>
         <p>
           <input type="checkbox" />
           {' '}
@@ -60,8 +80,8 @@ class ProductTable extends Component {
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Price</th>
+              <th colSpan="2">Name</th>
+              <th colSpan="2">Price</th>
             </tr>
           </thead>
           <tbody>
